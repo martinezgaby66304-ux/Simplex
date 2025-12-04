@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.optimize as opt
 
 class Simplex:
     def __init__(self, funcion, restriccion, tipo):
@@ -39,3 +40,26 @@ for i in range(n):
     restricciones.append(coeficientes)
     limite = float(input(f"Ingrese el límite de la restricción {i+1}: "))
     limites.append(limite)
+
+Simplex = Simplex(funcion, restricciones, tipo)
+A = np.array(restricciones)
+limites = np.array(limites)
+
+if tipo == 1:
+       c = -np.array(funcion)
+else:
+       c = np.array(funcion)
+
+res = opt.linprog(c, A_ub=A, b_ub=limites, method="simplex")
+
+print("RESULTADOS")
+if res.success:
+    if tipo == 1:
+        print("Problema de Maximización")
+        print("Valores óptimos de las variables:", res.x)
+        print("Valor óptimo Z:", -res.fun)
+    else:
+        print("Problema de Minimización")
+        print("Valores óptimos de las variables:", res.x)
+        print("Valor óptimo Z:", res.fun)
+
